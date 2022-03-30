@@ -1,0 +1,22 @@
+{% extends 'base.html' %} <br />
+{% block content %}
+<h2>Groups List</h2>
+
+<div>
+  <button>Add group</button>
+</div>
+
+{% if group_list %}
+<ul>
+  {% for group in group_list %}
+  <li>
+    {{ group.name }} / {{ group.description }}
+    <button>Edit</button>
+    <button>Delete</button>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no users in db</p>
+{% endif %} <br />
+{% endblock %}

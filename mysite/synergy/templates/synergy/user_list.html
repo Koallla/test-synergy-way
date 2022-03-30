@@ -1,0 +1,21 @@
+{% extends 'base.html' %} <br />
+{% block content %}
+<h2>Users List</h2>
+<div>
+  <button>Add user</button>
+</div>
+
+{% if user_list %}
+<ul>
+  {% for user in user_list %}
+  <li>
+    {{ user.username }} / {{ user.created }} / {{ user.group }}
+    <button>Edit</button>
+    <button>Delete</button>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no users in db</p>
+{% endif %} <br />
+{% endblock %}
