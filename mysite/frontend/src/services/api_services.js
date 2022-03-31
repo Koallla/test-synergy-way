@@ -1,22 +1,29 @@
-import axios from 'axios';
-const API_URL = 'http://localhost:8000';
+import axios from "axios";
+const API_URL = "http://localhost:8000";
 
 export default class ApiService {
-  constructor() {}
+  // constructor() {}
 
   getUsers() {
     const url = `${API_URL}/api/users/`;
-    return axios.get(url).then(response => response.data);
+    return axios.get(url).then((response) => response.data);
   }
 
   getGroups() {
     const url = `${API_URL}/api/groups/`;
-    return axios.get(url).then(response => response.data);
+    return axios.get(url).then((response) => response.data);
   }
 
-  createCustomer(customer) {
+  getGroupsNames() {
+    const url = `${API_URL}/api/groups/`;
+    return axios
+      .get(url)
+      .then((response) => response.data.map((el) => el.name));
+  }
+
+  createUser(user) {
     const url = `${API_URL}/api/customers/`;
-    return axios.post(url, customer);
+    return axios.post(url, user);
   }
 
   updateCustomer(customer) {

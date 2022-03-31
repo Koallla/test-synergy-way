@@ -1,55 +1,52 @@
-import React, { Component } from 'react';
-import ApiService from '../services/api_services';
+import React, { Component } from "react";
+import ApiService from "../services/api_services";
 
 const apiService = new ApiService();
 
-export default class Users extends Component {
+export default class Groups extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: [],
+      groups: [],
     };
   }
 
   componentDidMount() {
-    apiService.getUsers().then(users => {
-      this.setState({ users });
+    apiService.getGroups().then((groups) => {
+      this.setState({ groups });
     });
   }
 
   render() {
-    const { users } = this.state;
+    const { groups } = this.state;
     return (
       <div className="users--list">
-        <p>kasjdljasldj</p>
         <table className="table">
           <thead key="thead">
             <tr>
               <th>id</th>
               <th>Name</th>
-              <th>Date of creating</th>
-              <th>Group</th>
+              <th>Description</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user.id}>
-                <td>{user.id} </td>
-                <td>{user.username}</td>
-                <td>{user.created}</td>
-                <td>{user.group}</td>
+            {groups.map((group) => (
+              <tr key={group.id}>
+                <td>{group.id} </td>
+                <td>{group.name}</td>
+                <td>{group.description}</td>
                 <td>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     // onClick={(e) => this.handleEdit(e, user.id)}
                   >
                     Edit
                   </button>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     // onClick={(e) => this.handleDelete(e, user.id)}
                   >
                     Delete
@@ -63,7 +60,7 @@ export default class Users extends Component {
           className="btn btn-primary"
           // onClick={this.nextPage}
         >
-          Add user
+          Add group
         </button>
       </div>
     );

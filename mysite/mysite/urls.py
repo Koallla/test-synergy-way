@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path, re_path
 from synergy.views import UserView, GroupView, SingleUserView, SingleGroupView
-from frontend.views import index
+# from frontend.views import index
 
 
 
@@ -15,9 +15,9 @@ urlpatterns = [
     path('api/groups/<int:pk>', SingleGroupView.as_view()),
 
 
-    path('users', index),
+    # path('users', index),
     # path('users/:id', index),
-    path('groups', index),
+    # path('groups', index),
     # path('groups/:id', index),
 
 
