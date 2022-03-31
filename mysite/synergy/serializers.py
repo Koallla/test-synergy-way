@@ -1,15 +1,15 @@
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 from .models import User, Group
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'created', 'group')
 
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(ModelSerializer):
     class Meta:
         model = Group
         fields = ('id', 'name', 'description')

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import ApiService from '../services/api_services';
+
+const apiService = new ApiService();
 
 export default class Users extends Component {
   constructor(props) {
@@ -9,13 +12,9 @@ export default class Users extends Component {
   }
 
   componentDidMount() {
-    fetch('api/users/')
-      .then(users => {
-        return users.json();
-      })
-      .then(users => {
-        this.setState({ users });
-      });
+    apiService.getUsers().then(users => {
+      this.setState({ users });
+    });
   }
 
   render() {
