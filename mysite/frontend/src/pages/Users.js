@@ -1,36 +1,40 @@
 import React, { Component } from "react";
 import ApiService from "../services/api_services";
+import UserForm from "./Form/userForm";
 
 const apiService = new ApiService();
 
 export default class Users extends Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+
     this.state = {
+      id: "",
       users: [],
       groups: [],
       username: "",
       group: "",
+      isOpenCreate: false,
+      isOpenEdit: false,
     };
   }
 
   componentDidMount() {
     apiService.getUsers().then((users) => {
-      console.log(users);
       this.setState({ users });
     });
 
-    apiService.getGroupsNames().then((groups) => {
-      console.log(groups);
+    apiService.getGroups().then((groups) => {
       this.setState({ groups });
     });
   }
 
   getSelectOptions() {
-    return this.state.groups.map((text, index) => (
-      <option key={index} value={text}>
-        {text}
+    return this.state.groups.map((group, index) => (
+      <option key={index} value={group.id}>
+        {group.name}
       </option>
     ));
   }
@@ -40,31 +44,91 @@ export default class Users extends Component {
     this.setState({ [name]: value });
   };
 
-  handleCreate() {
-    // apiService
-    //   .createUser({
-    //     username: this.userName.value,
-    //     group: this.group.value,
-    //   })
-    //   .then((result) => {
-    //     alert("Customer created!");
-    //   })
-    //   .catch(() => {
-    //     alert("There was an error! Please re-check your form.");
-    //   });
-  }
+  handleSubmit = (e) => {
+    e.preventDefault();
 
-  handleSubmit = (evt) => {
-    evt.preventDefault();
+    const { id, username, group } = this.state;
 
-    const { username, group } = this.state;
+    if (typeof id === "number") {
+      apiService
+        .updateUser({
+          id: id,
+          username: username,
+          group: group,
+        })
+        .then((res) => {
+          alert(`User ${username} edited!`);
+        })
+        .catch(() => {
+          alert("There was an error! Please re-check your form.");
+        });
+    } else {
+      apiService
+        .createUser({
+          username: username,
+          group: group,
+        })
+        .then(() => {
+          alert(`User ${username} created!`);
+        })
+        .catch(() => {
+          alert("There was an error! Please re-check your form.");
+        });
+    }
 
-    console.log(username);
-    console.log(group);
+    this.handleToggle(id);
+    this.handleClear();
+  };
+
+  handleDelete = (id) => {
+    this.setState((state) => ({
+      users: state.users.filter((users) => users.id !== id),
+    }));
+    apiService
+      .deleteUser({
+        id: id,
+      })
+      .then(() => {
+        alert(`User with id: ${id} deleted!`);
+      })
+      .catch(() => {
+        alert("There was an error! Please re-check your form.");
+      });
+
+    this.handleClear();
+  };
+
+  handleEdit = (id) => {
+    this.handleToggle(id);
+    this.setState({
+      id: id,
+    });
+  };
+
+  handleToggle = (id) => {
+    if (typeof id === "number") {
+      this.setState((state) => ({
+        isOpenEdit: !state.isOpenEdit,
+        isOpenCreate: false,
+      }));
+    } else {
+      this.setState((state) => ({
+        isOpenCreate: !state.isOpenCreate,
+        isOpenEdit: false,
+      }));
+    }
+  };
+
+  handleClear = () => {
+    this.setState({
+      id: "",
+      username: "",
+      group: "",
+    });
   };
 
   render() {
-    const { users, username, group } = this.state;
+    const { users, username, group, isOpenCreate, isOpenEdit } = this.state;
     return (
       <div className="users--list">
         <p>Users page</p>
@@ -89,14 +153,14 @@ export default class Users extends Component {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    // onClick={(e) => this.handleEdit(e, user.id)}
+                    onClick={() => this.handleEdit(user.id)}
                   >
                     Edit
                   </button>
                   <button
                     type="button"
                     className="btn btn-primary"
-                    // onClick={(e) => this.handleDelete(e, user.id)}
+                    onClick={() => this.handleDelete(user.id)}
                   >
                     Delete
                   </button>
@@ -105,31 +169,30 @@ export default class Users extends Component {
             ))}
           </tbody>
         </table>
-        <button
-          className="btn btn-primary"
-          // onClick={this.handleCreate}
-        >
+        <button className="btn btn-primary" onClick={this.handleToggle}>
           Add user
         </button>
+        {isOpenCreate && (
+          <UserForm
+            title={"Create user"}
+            username={username}
+            group={group}
+            selectOptions={this.getSelectOptions()}
+            handleSubmit={this.handleSubmit}
+            handleChange={this.handleChange}
+          />
+        )}
 
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label>UesrName:</label>
-            <input
-              className="form-control"
-              type="text"
-              name="username"
-              value={username}
-              onChange={this.handleChange}
-            />
-            <label>Group:</label>
-            <select value={group} name="group" onChange={this.handleChange}>
-              {this.getSelectOptions()}
-            </select>
-
-            <input className="btn btn-primary" type="submit" value="Submit" />
-          </div>
-        </form>
+        {isOpenEdit && (
+          <UserForm
+            title={"Edit user"}
+            username={username}
+            group={group}
+            selectOptions={this.getSelectOptions()}
+            handleSubmit={this.handleSubmit}
+            handleChange={this.handleChange}
+          />
+        )}
       </div>
     );
   }
