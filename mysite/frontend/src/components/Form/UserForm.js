@@ -1,7 +1,8 @@
-const GroupForm = ({
+const UserForm = ({
   title,
-  name,
-  description,
+  username,
+  group,
+  selectOptions,
   handleSubmit,
   handleChange,
 }) => (
@@ -10,23 +11,29 @@ const GroupForm = ({
       <h2>{title}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Group name:</label>
+          <label>User name:</label>
           <input
+            required
             className="form-control"
             type="text"
-            name="name"
-            value={name}
+            name="username"
+            value={username}
             onChange={handleChange}
           />
 
-          <label>Group description:</label>
-          <input
+          <label>User group:</label>
+          <select
+            required
             className="form-control"
-            type="text"
-            name="description"
-            value={description}
+            value={group}
+            name="group"
             onChange={handleChange}
-          />
+          >
+            <option value="" disabled hidden>
+              Choose a group
+            </option>
+            {selectOptions}
+          </select>
           <input className="btn btn-primary" type="submit" value="Submit" />
         </div>
       </form>
@@ -34,4 +41,4 @@ const GroupForm = ({
   </div>
 );
 
-export default GroupForm;
+export default UserForm;

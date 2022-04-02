@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import GroupForm from "./Form/groupForm";
+import GroupForm from "../components/Form/GroupForm";
+import GroupsTable from "../components/Tables/GroupsTable/GroupsTable";
 import ApiService from "../services/api_services";
 
 const apiService = new ApiService();
@@ -7,8 +8,6 @@ const apiService = new ApiService();
 export default class Groups extends Component {
   constructor(props) {
     super(props);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
     this.state = {
       id: "",
       groups: [],
@@ -36,7 +35,16 @@ export default class Groups extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { id, name, description } = this.state;
+    const { id, groups, name, description } = this.state;
+
+    const group = groups.find((group) => group.id === id);
+
+    const groupUpdateData = {
+      id: id,
+      name: name,
+      description: description,
+    };
+
     if (typeof id === "number") {
       apiService
         .updateGroup({
@@ -44,8 +52,14 @@ export default class Groups extends Component {
           name: name,
           description: description,
         })
-        .then((res) => {
-          alert(`Group ${name} edited!`);
+        .then(() => {
+          alert(`Group with id:${id} edited!`);
+          const updaterGroup = { ...group, ...groupUpdateData };
+          this.setState((state) => ({
+            groups: state.groups.map((group) =>
+              group.id === id ? { ...group, ...updaterGroup } : group
+            ),
+          }));
         })
         .catch(() => {
           alert("There was an error! Please re-check your form.");
@@ -74,15 +88,15 @@ export default class Groups extends Component {
     if (usedGroups.includes(id)) {
       alert("User is assigned to this group!");
     } else {
-      this.setState((state) => ({
-        groups: state.groups.filter((groups) => groups.id !== id),
-      }));
       apiService
         .deleteGroup({
           id: id,
         })
         .then(() => {
           alert(`Group with id: ${id} deleted!`);
+          this.setState((state) => ({
+            groups: state.groups.filter((groups) => groups.id !== id),
+          }));
         })
         .catch(() => {
           alert("There was an error! Please re-check your form.");
@@ -124,7 +138,15 @@ export default class Groups extends Component {
   render() {
     const { groups, isOpenCreate, isOpenEdit, name, description } = this.state;
     return (
-      <div className="groups--list">
+      <>
+        <GroupsTable
+          groups={groups}
+          handleEdit={this.handleEdit}
+          handleDelete={this.handleDelete}
+          handleToggle={this.handleToggle}
+        />
+
+        {/* < className="groups--list">
         <table className="table">
           <thead key="thead">
             <tr>
@@ -161,8 +183,8 @@ export default class Groups extends Component {
           </tbody>
         </table>
         <button className="btn btn-primary" onClick={this.handleToggle}>
-          Add group
-        </button>
+          Add group 
+        </button> */}
 
         {isOpenCreate && (
           <GroupForm
@@ -183,7 +205,7 @@ export default class Groups extends Component {
             handleChange={this.handleChange}
           />
         )}
-      </div>
+      </>
     );
   }
 }

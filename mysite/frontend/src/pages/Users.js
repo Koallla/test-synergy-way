@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import ApiService from "../services/api_services";
-import UserForm from "./Form/userForm";
+import UserForm from "../components/Form/UserForm";
+import UsersTable from "../components/Tables/UsersTable/UsersTable";
 
 const apiService = new ApiService();
 
 export default class Users extends Component {
   constructor(props) {
     super(props);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
-
     this.state = {
       id: "",
       users: [],
@@ -47,17 +45,26 @@ export default class Users extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const { id, username, group } = this.state;
+    const { id, users, username, group } = this.state;
 
     if (typeof id === "number") {
+      const user = users.find((user) => user.id === id);
+      const userUpdateData = {
+        id: id,
+        username: username,
+        group: group,
+      };
+
       apiService
-        .updateUser({
-          id: id,
-          username: username,
-          group: group,
-        })
-        .then((res) => {
-          alert(`User ${username} edited!`);
+        .updateUser(userUpdateData)
+        .then(() => {
+          alert(`User with id: ${id} edited!`);
+          const updaterUser = { ...user, ...userUpdateData };
+          this.setState((state) => ({
+            users: state.users.map((user) =>
+              user.id === id ? { ...user, ...updaterUser } : user
+            ),
+          }));
         })
         .catch(() => {
           alert("There was an error! Please re-check your form.");
@@ -81,15 +88,15 @@ export default class Users extends Component {
   };
 
   handleDelete = (id) => {
-    this.setState((state) => ({
-      users: state.users.filter((users) => users.id !== id),
-    }));
     apiService
       .deleteUser({
         id: id,
       })
       .then(() => {
         alert(`User with id: ${id} deleted!`);
+        this.setState((state) => ({
+          users: state.users.filter((users) => users.id !== id),
+        }));
       })
       .catch(() => {
         alert("There was an error! Please re-check your form.");
@@ -130,48 +137,13 @@ export default class Users extends Component {
   render() {
     const { users, username, group, isOpenCreate, isOpenEdit } = this.state;
     return (
-      <div className="users--list">
-        <p>Users page</p>
-        <table className="table">
-          <thead key="thead">
-            <tr>
-              <th>id</th>
-              <th>Name</th>
-              <th>Date of creating</th>
-              <th>Group</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id} </td>
-                <td>{user.username}</td>
-                <td>{user.created}</td>
-                <td>{user.group}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => this.handleEdit(user.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => this.handleDelete(user.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button className="btn btn-primary" onClick={this.handleToggle}>
-          Add user
-        </button>
+      <>
+        <UsersTable
+          users={users}
+          handleEdit={this.handleEdit}
+          handleDelete={this.handleDelete}
+          handleToggle={this.handleToggle}
+        />
         {isOpenCreate && (
           <UserForm
             title={"Create user"}
@@ -193,7 +165,7 @@ export default class Users extends Component {
             handleChange={this.handleChange}
           />
         )}
-      </div>
+      </>
     );
   }
 }
