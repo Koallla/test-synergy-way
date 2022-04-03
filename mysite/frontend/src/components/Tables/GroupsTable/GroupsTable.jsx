@@ -20,7 +20,7 @@ const GroupTable = ({ groups, handleEdit, handleDelete, handleToggle }) => {
               <td>{group.name}</td>
               <td>{group.description}</td>
               <td className={styles.button}>
-                <div class="btn-group mr-2">
+                <div className="btn-group mr-2">
                   <button
                     type="button"
                     className="btn btn-primary"

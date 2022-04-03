@@ -1,3 +1,5 @@
+import styles from "./User.module.css";
+
 const UserForm = ({
   title,
   username,
@@ -5,11 +7,22 @@ const UserForm = ({
   selectOptions,
   handleSubmit,
   handleChange,
+  handleCloseForm,
 }) => (
   <div className="card">
     <div className="card-header">
-      <h2>{title}</h2>
       <form onSubmit={handleSubmit}>
+        <div className={styles.header}>
+          <h2>{title}</h2>
+          <button
+            type="button"
+            className="close"
+            aria-label="Close"
+            onClick={handleCloseForm}
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div className="form-group">
           <label>User name:</label>
           <input

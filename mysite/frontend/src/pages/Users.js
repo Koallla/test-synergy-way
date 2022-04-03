@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ApiService from "../services/api_services";
-import UserForm from "../components/Form/UserForm";
+import UserForm from "../components/Form/UserForms/UserForm";
 import UsersTable from "../components/Tables/UsersTable/UsersTable";
 
 const apiService = new ApiService();
@@ -75,7 +75,12 @@ export default class Users extends Component {
           username: username,
           group: group,
         })
-        .then(() => {
+        .then((response) => {
+          const newUser = response.data;
+          const newUsersArr = users.concat([newUser]);
+          this.setState(() => ({
+            users: newUsersArr,
+          }));
           alert(`User ${username} created!`);
         })
         .catch(() => {
@@ -126,6 +131,13 @@ export default class Users extends Component {
     }
   };
 
+  handleCloseForm = () => {
+    this.setState(() => ({
+      isOpenEdit: false,
+      isOpenCreate: false,
+    }));
+  };
+
   handleClear = () => {
     this.setState({
       id: "",
@@ -146,23 +158,25 @@ export default class Users extends Component {
         />
         {isOpenCreate && (
           <UserForm
-            title={"Create user"}
+            title={"Create user form"}
             username={username}
             group={group}
             selectOptions={this.getSelectOptions()}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
+            handleCloseForm={this.handleCloseForm}
           />
         )}
 
         {isOpenEdit && (
           <UserForm
-            title={"Edit user"}
+            title={"Edit user form"}
             username={username}
             group={group}
             selectOptions={this.getSelectOptions()}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
+            handleCloseForm={this.handleCloseForm}
           />
         )}
       </>

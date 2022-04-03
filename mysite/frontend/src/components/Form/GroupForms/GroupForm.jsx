@@ -1,14 +1,27 @@
+import styles from "./Group.module.css";
+
 const GroupForm = ({
   title,
   name,
   description,
   handleSubmit,
   handleChange,
+  handleCloseForm,
 }) => (
   <div className="card">
     <div className="card-header">
-      <h2>{title}</h2>
       <form onSubmit={handleSubmit}>
+        <div className={styles.header}>
+          <h2>{title}</h2>
+          <button
+            type="button"
+            className="close"
+            aria-label="Close"
+            onClick={handleCloseForm}
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div className="form-group">
           <label>Group name:</label>
           <input

@@ -22,7 +22,7 @@ const UsersTable = ({ users, handleEdit, handleDelete, handleToggle }) => {
               <td>{user.created}</td>
               <td>{user.group}</td>
               <td className={styles.button}>
-                <div class="btn-group mr-2">
+                <div className="btn-group mr-2">
                   <button
                     type="button"
                     className="btn btn-primary"
