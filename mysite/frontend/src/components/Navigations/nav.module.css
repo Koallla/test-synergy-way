@@ -1,0 +1,7 @@
+.container {
+  display: flex;
+  justify-content: right;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: rgb(155, 155, 155);
+}

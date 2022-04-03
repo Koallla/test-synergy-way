@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Users from '../../pages/Users';
-import Groups from '../../pages/Groups';
-import Nav from '../../pages/Navigations/Nav';
+import React, { Component } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Users from "../pages/Users";
+import Groups from "../pages/Groups";
+import Nav from "./Navigations/Nav";
 
 const PagesRoute = () => (
-  <div className="content">
+  <div className="container">
     <Nav />
     <Routes>
-      <Route path="/users" element={<Users />} />
-      <Route path="/groups" element={<Groups />} />
+      <Route path="/users" exact element={<Users />} />
+      <Route path="/groups" exact element={<Groups />} />
     </Routes>
   </div>
 );

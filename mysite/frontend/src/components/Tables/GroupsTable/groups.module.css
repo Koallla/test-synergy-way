@@ -1,0 +1,8 @@
+.titles {
+  text-align: center;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
