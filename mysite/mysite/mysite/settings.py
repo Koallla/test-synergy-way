@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'storagebase',
         'USER': 'mydatabaseuser',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': 'db', #'localhost' 'db', 
         'PORT': '5432',
     }
 }

@@ -3,6 +3,8 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from .serializers import UserSerializer, GroupSerializer
 
+
+
 class UserView(ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
