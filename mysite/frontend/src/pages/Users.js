@@ -30,11 +30,16 @@ export default class Users extends Component {
   }
 
   getSelectOptions() {
-    return this.state.groups.map((group, index) => (
-      <option key={index} value={group.id}>
-        {group.name}
-      </option>
-    ));
+    const { groups } = this.state;
+    if (groups.length > 0)
+      return groups.map((group, index) => (
+        <option key={index} value={group.id}>
+          {group.name}
+        </option>
+      ));
+    else {
+      return <option disabled>Please add a group first! </option>;
+    }
   }
 
   handleChange = ({ target }) => {

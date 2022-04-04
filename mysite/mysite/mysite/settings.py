@@ -19,9 +19,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = int(os.environ.get("DEBUG", default=0))
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-3%o$t+ggsm8-co+d)ss2)f)d%hyb#d5z06qw+1q$a4$=%a(##h'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -75,23 +79,17 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'db')
-POSTGRES_PORT = os.environ.get('POSTGRES_PORT', '5432')
-POSTGRES_DB = os.environ.get('POSTGRES_DB', 'storagebase')
-POSTGRES_USER = os.environ.get('POSTGRES_USER', 'mydatabaseuser')
-POSTGRES_PW = os.environ.get('POSTGRES_PASSWORD', 'admin')
-
 
 
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': POSTGRES_DB,
-        'USER': POSTGRES_USER,
-        'PASSWORD': POSTGRES_PW,
-        'HOST': POSTGRES_HOST, #'localhost' 'db', 
-        'PORT': POSTGRES_PORT,
+        'NAME': 'storagebase',
+        'USER': 'mydatabaseuser',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
